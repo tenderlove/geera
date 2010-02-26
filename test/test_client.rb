@@ -126,18 +126,38 @@ class TestClient < Test::Unit::TestCase
     assert @ticket.fixable?
   end
 
-  def test_fix_comment_required
-    assert_raises(ArgumentError) do
-      @ticket.fix!
-    end
+  def test_fix!
+    startid = '1'
 
-    assert_raises(ArgumentError) do
-      @ticket.fix!(:comment => nil)
-    end
+    actions = [
+      Jira4R::V2::RemoteNamedObject.new(startid, "Fix"),
+      Jira4R::V2::RemoteNamedObject.new("2", "Update Progress"),
+    ]
 
-    assert_raises(ArgumentError) do
-      @ticket.fix!(:comment => '')
-    end
+    @fj.returns[:getAvailableActions] = actions
+    @ticket.fix!
+
+    last_call = @fj.call_stack.pop
+    assert_equal :progressWorkflowAction, last_call.first
+    assert_equal @number, last_call[1]
+    assert_equal startid, last_call[2]
+
+    assert_instance_of(Array, last_call.last)
+
+    rfv = last_call.last.first
+    assert_equal 'assignee', rfv.id
+    assert_equal @username, rfv.values
+  end
+
+  def test_assign_to
+    @ticket.assign_to 'aaron'
+    last_call = @fj.call_stack.pop
+    assert_equal :updateIssue, last_call.first
+    assert_instance_of Array, last_call.last
+
+    rfv = last_call.last.first
+    assert_equal 'assignee', rfv.id
+    assert_equal 'aaron', rfv.values
   end
 end
 

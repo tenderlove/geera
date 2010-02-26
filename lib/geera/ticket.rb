@@ -26,6 +26,8 @@ module Geera
       available_actions.map { |a| a.name }.include?('Start')
     end
 
+    ###
+    # Start this ticket.
     def start!
       action = available_actions.find { |x| x.name == 'Start' }
       assign = Jira4R::V2::RemoteFieldValue.new('assignee', @client.username)
@@ -39,14 +41,18 @@ module Geera
     end
 
     ###
-    # Fix this ticket.  A comment is required.
-    #
-    # === Example
-    #
-    #   ticket.fix!(:comment => 'hello world')
-    def fix! options = {}
-      raise(ArgumentError, "comment required") unless options[:comment]
-      raise(ArgumentError, "comment required") if options[:comment].empty?
+    # Fix this ticket.
+    def fix!
+      action = available_actions.find { |x| x.name == 'Fix' }
+      assign = Jira4R::V2::RemoteFieldValue.new('assignee', @client.username)
+      @ctx.progressWorkflowAction(@number, action.id, [assign])
+    end
+
+    ###
+    # Assign this ticket to +username+
+    def assign_to username
+      assign = Jira4R::V2::RemoteFieldValue.new('assignee', username)
+      @ctx.updateIssue(@number, [assign])
     end
   end
 end
