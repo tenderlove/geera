@@ -46,6 +46,7 @@ module Geera
     #   ticket.fix!(:comment => 'hello world')
     def fix! options = {}
       raise(ArgumentError, "comment required") unless options[:comment]
+      raise(ArgumentError, "comment required") if options[:comment].empty?
     end
   end
 end

@@ -130,6 +130,14 @@ class TestClient < Test::Unit::TestCase
     assert_raises(ArgumentError) do
       @ticket.fix!
     end
+
+    assert_raises(ArgumentError) do
+      @ticket.fix!(:comment => nil)
+    end
+
+    assert_raises(ArgumentError) do
+      @ticket.fix!(:comment => '')
+    end
   end
 end
 
