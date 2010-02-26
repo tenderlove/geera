@@ -24,6 +24,12 @@ class TestClient < Test::Unit::TestCase
     @fj = FakeJiraTool.new
     flexmock(Jira4R::JiraTool).should_receive(:new).with(2, @url).
       and_return(@fj)
+
+    @number   = 'BZ-123'
+    @client   = Geera::Client.new(@url)
+    @username = 'foo'
+    @client.login(@username, 'bar')
+    @ticket = @client.ticket @number
   end
 
   def test_login
@@ -51,36 +57,24 @@ class TestClient < Test::Unit::TestCase
   end
 
   def test_available_actions
-    number = 'BZ-123'
-    comment = 'hello world'
-
     actions = [
       Jira4R::V2::RemoteNamedObject.new("1", "Fix"),
       Jira4R::V2::RemoteNamedObject.new("2", "Update Progress"),
     ]
 
     @fj.returns[:getAvailableActions] = actions
-    client = Geera::Client.new(@url)
-    client.login('foo', 'bar')
 
-    ticket = client.ticket number
-    assert_equal(actions, ticket.available_actions)
+    assert_equal(actions, @ticket.available_actions)
   end
 
   def test_startable?
-    number = 'BZ-123'
-
     actions = [
       Jira4R::V2::RemoteNamedObject.new("1", "Fix"),
       Jira4R::V2::RemoteNamedObject.new("2", "Update Progress"),
     ]
-
     @fj.returns[:getAvailableActions] = actions
-    client = Geera::Client.new(@url)
-    client.login('foo', 'bar')
 
-    ticket = client.ticket number
-    assert !ticket.startable?
+    assert !@ticket.startable?
 
     actions = [
       Jira4R::V2::RemoteNamedObject.new("1", "Fix"),
@@ -88,13 +82,11 @@ class TestClient < Test::Unit::TestCase
     ]
 
     @fj.returns[:getAvailableActions] = actions
-    assert ticket.startable?
+    assert @ticket.startable?
   end
 
   def test_start!
-    number = 'BZ-123'
     startid = '1'
-    user = 'foo'
 
     actions = [
       Jira4R::V2::RemoteNamedObject.new(startid, "Start"),
@@ -102,22 +94,21 @@ class TestClient < Test::Unit::TestCase
     ]
 
     @fj.returns[:getAvailableActions] = actions
-    client = Geera::Client.new(@url)
-    client.login(user, 'bar')
-
-    ticket = client.ticket number
-    ticket.start!
+    @ticket.start!
 
     last_call = @fj.call_stack.pop
     assert_equal :progressWorkflowAction, last_call.first
-    assert_equal number, last_call[1]
+    assert_equal @number, last_call[1]
     assert_equal startid, last_call[2]
 
     assert_instance_of(Array, last_call.last)
 
     rfv = last_call.last.first
     assert_equal 'assignee', rfv.id
-    assert_equal user, rfv.values
+    assert_equal @username, rfv.values
+  end
+
+  def test_fixable
   end
 end
 
