@@ -20,5 +20,9 @@ module Geera
     def available_actions
       @ctx.getAvailableActions @number
     end
+
+    def startable?
+      available_actions.map { |a| a.name }.include?('Start')
+    end
   end
 end

@@ -66,5 +66,30 @@ class TestClient < Test::Unit::TestCase
     ticket = client.ticket number
     assert_equal(actions, ticket.available_actions)
   end
+
+  def test_startable?
+    number = 'BZ-123'
+    comment = 'hello world'
+
+    actions = [
+      Jira4R::V2::RemoteNamedObject.new("1", "Fix"),
+      Jira4R::V2::RemoteNamedObject.new("2", "Update Progress"),
+    ]
+
+    @fj.returns[:getAvailableActions] = actions
+    client = Geera::Client.new(@url)
+    client.login('foo', 'bar')
+
+    ticket = client.ticket number
+    assert !ticket.startable?
+
+    actions = [
+      Jira4R::V2::RemoteNamedObject.new("1", "Fix"),
+      Jira4R::V2::RemoteNamedObject.new("2", "Start"),
+    ]
+
+    @fj.returns[:getAvailableActions] = actions
+    assert ticket.startable?
+  end
 end
 
