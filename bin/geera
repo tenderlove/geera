@@ -1,3 +1,62 @@
 #!/usr/bin/env ruby
 
-abort "you need to write me"
+require 'rubygems'
+require 'geera'
+require 'yaml'
+require 'optparse'
+
+config = File.join(ENV['HOME'], '.geera')
+login  = YAML.load(File.read config) rescue nil
+
+unless login
+  File.open config, 'wb' do |f|
+
+    options = {
+      'username' => 'FIXME',
+      'password' => 'FIXME',
+      'url'      => 'FIXME',
+      'qa'       => 'FIXME'
+    }
+
+    YAML.dump options, f
+    f.chmod(0600)
+  end
+  abort "Created ~/.geera for you. Fill it out"
+end
+
+options = {}
+OptionParser.new do |opts|
+  opts.banner = "Usage: geera [options]"
+
+  opts.on("-m", "--message MESSAGE", "Add comment") do |v|
+    options[:message] = v
+  end
+end.parse!
+
+geera = Geera::Client.new(login['url'])
+geera.login(login['username'], login['password'])
+
+command = ARGV.shift
+number  = ARGV.shift
+ticket  = geera.ticket number
+
+case command
+when 'start'
+  unless ticket.startable?
+    abort "Ticket #{number} is not startable. Available actions:\n" \
+      "  - #{ticket.available_actions.map { |x| x.name + "\n" }.join("  - ")}"
+  end
+  ticket.start!
+when 'fix'
+  ticket.start! if ticket.startable?
+  ticket.fix! if ticket.fixable?
+  ticket.assign_to login['qa'] if login['qa']
+when 'mv', 'reassign'
+  ticket.assign_to ARGV.shift
+when 'take'
+  ticket.assign_to login['username']
+when 'comment'
+  # Do nothing, let the -m flag pick it up
+end
+
+ticket.comment options[:message] if options[:message]
