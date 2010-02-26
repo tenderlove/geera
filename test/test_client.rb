@@ -5,14 +5,16 @@ require 'flexmock/test_unit'
 ###
 # This is our fake jira object
 class FakeJiraTool
-  attr_accessor :call_stack
+  attr_accessor :call_stack, :returns
 
   def initialize
     @call_stack = []
+    @returns = {}
   end
 
   def method_missing *args
     @call_stack << args
+    @returns.delete(args.first) if @returns.key?(args.first)
   end
 end
 
@@ -46,6 +48,23 @@ class TestClient < Test::Unit::TestCase
     assert_equal number, last_call[1]
     assert_instance_of(Jira4R::V2::RemoteComment, last_call.last)
     assert_equal(comment, last_call.last.body)
+  end
+
+  def test_available_actions
+    number = 'BZ-123'
+    comment = 'hello world'
+
+    actions = [
+      Jira4R::V2::RemoteNamedObject.new("1", "Fix"),
+      Jira4R::V2::RemoteNamedObject.new("2", "Update Progress"),
+    ]
+
+    @fj.returns[:getAvailableActions] = actions
+    client = Geera::Client.new(@url)
+    client.login('foo', 'bar')
+
+    ticket = client.ticket number
+    assert_equal(actions, ticket.available_actions)
   end
 end
 

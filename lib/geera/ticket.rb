@@ -14,5 +14,11 @@ module Geera
     def comment text
       @ctx.addComment @number, Jira4R::V2::RemoteComment.new(nil, text)
     end
+
+    ###
+    # Returns a list of the actions that can be performed on this ticket.
+    def available_actions
+      @ctx.getAvailableActions @number
+    end
   end
 end
