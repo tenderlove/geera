@@ -31,5 +31,9 @@ module Geera
       assign = Jira4R::V2::RemoteFieldValue.new('assignee', @client.username)
       @ctx.progressWorkflowAction(@number, action.id, [assign])
     end
+
+    def fixable?
+      available_actions.map { |a| a.name }.include?('Fix')
+    end
   end
 end

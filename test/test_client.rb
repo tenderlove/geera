@@ -108,7 +108,22 @@ class TestClient < Test::Unit::TestCase
     assert_equal @username, rfv.values
   end
 
-  def test_fixable
+  def test_fixable?
+    actions = [
+      Jira4R::V2::RemoteNamedObject.new('1', "Start"),
+      Jira4R::V2::RemoteNamedObject.new("2", "Update Progress"),
+    ]
+
+    @fj.returns[:getAvailableActions] = actions
+    assert !@ticket.fixable?
+
+    actions = [
+      Jira4R::V2::RemoteNamedObject.new('1', "Fix"),
+      Jira4R::V2::RemoteNamedObject.new("2", "Update Progress"),
+    ]
+
+    @fj.returns[:getAvailableActions] = actions
+    assert @ticket.fixable?
   end
 end
 
