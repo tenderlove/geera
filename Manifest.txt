@@ -1,7 +1,10 @@
-History.txt
+.autotest
+CHANGELOG.rdoc
 Manifest.txt
-README.txt
+README.rdoc
 Rakefile
 bin/geera
 lib/geera.rb
-test/test_geera.rb
+lib/geera/client.rb
+lib/geera/ticket.rb
+test/test_client.rb
