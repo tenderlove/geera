@@ -7,8 +7,18 @@ module Geera
       @tool.logger = Logger.new nil
     end
 
-    def login user, pass
-      @tool.login user, pass
+    ###
+    # Login with +user+ and +password+
+    def login user, password
+      @tool.login user, password
+    end
+
+    ###
+    # Get the ticket with +number+.  Returns a Geera::Ticket object.
+    #
+    #   client.ticket 'BZ-123' # => #<Geera::Ticket>
+    def ticket number
+      Geera::Ticket.new @tool, number
     end
   end
 end
