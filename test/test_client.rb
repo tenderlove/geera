@@ -69,7 +69,6 @@ class TestClient < Test::Unit::TestCase
 
   def test_startable?
     number = 'BZ-123'
-    comment = 'hello world'
 
     actions = [
       Jira4R::V2::RemoteNamedObject.new("1", "Fix"),
@@ -90,6 +89,35 @@ class TestClient < Test::Unit::TestCase
 
     @fj.returns[:getAvailableActions] = actions
     assert ticket.startable?
+  end
+
+  def test_start!
+    number = 'BZ-123'
+    startid = '1'
+    user = 'foo'
+
+    actions = [
+      Jira4R::V2::RemoteNamedObject.new(startid, "Start"),
+      Jira4R::V2::RemoteNamedObject.new("2", "Update Progress"),
+    ]
+
+    @fj.returns[:getAvailableActions] = actions
+    client = Geera::Client.new(@url)
+    client.login(user, 'bar')
+
+    ticket = client.ticket number
+    ticket.start!
+
+    last_call = @fj.call_stack.pop
+    assert_equal :progressWorkflowAction, last_call.first
+    assert_equal number, last_call[1]
+    assert_equal startid, last_call[2]
+
+    assert_instance_of(Array, last_call.last)
+
+    rfv = last_call.last.first
+    assert_equal 'assignee', rfv.id
+    assert_equal user, rfv.values
   end
 end
 
