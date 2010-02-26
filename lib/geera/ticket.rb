@@ -32,8 +32,20 @@ module Geera
       @ctx.progressWorkflowAction(@number, action.id, [assign])
     end
 
+    ###
+    # Is this ticket in a Fix able state?
     def fixable?
       available_actions.map { |a| a.name }.include?('Fix')
+    end
+
+    ###
+    # Fix this ticket.  A comment is required.
+    #
+    # === Example
+    #
+    #   ticket.fix!(:comment => 'hello world')
+    def fix! options = {}
+      raise(ArgumentError, "comment required") unless options[:comment]
     end
   end
 end

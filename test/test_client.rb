@@ -125,5 +125,11 @@ class TestClient < Test::Unit::TestCase
     @fj.returns[:getAvailableActions] = actions
     assert @ticket.fixable?
   end
+
+  def test_fix_comment_required
+    assert_raises(ArgumentError) do
+      @ticket.fix!
+    end
+  end
 end
 
