@@ -1,32 +1,138 @@
 = geera
 
-* FIX (url)
+* http://example.com/
 
 == DESCRIPTION:
 
-FIX (describe your package)
+Geera is a command line tool for dealing with Jira tickets.
 
 == FEATURES/PROBLEMS:
 
-* FIX (list of features or problems)
+* Uses soap4r
 
 == SYNOPSIS:
 
-  FIX (code sample of usage)
+Geera provides a command line tool for interacting with the Jira ticketing
+system.
 
-== REQUIREMENTS:
+After you've installed Geera, you must configure your ~/.geera file like this:
 
-* FIX (list of requirements)
+  $ geera setup
+
+That command will create a $HOME/.geera file for you to fill out.  The config
+file will look something like this:
+
+  --- 
+  url: FIXME
+  username: FIXME
+  qa: FIXME
+  password: FIXME
+
+The "url" value should point to the Jira API url.  "username" and "password"
+are your username and password for the Jira system.  When running "geera fix",
+the ticket will be automatically reassigned to the username listed in "qa".
+If the "qa" value is removed, the ticket will not be reassigned when the
+ticket is fixed.
+
+=== Basic Usage
+
+Geera commands have the basic form of "geera ACTION TICKET", where
+ACTION is the action you want to perform, and TICKET is the ticket on which
+you wish to perform that action.
+
+The current available commands are:
+
+  * start
+  * fix
+  * mv
+  * take
+  * comment
+
+=== "start" command
+
+The "start" command lets you start a ticket.  This command only works when the
+ticket is in a startable state.  For example:
+
+  $ geera start BZ-1000
+
+This command will set the state of BZ-1000 to "start".  If the ticket is not
+in a startable state, an error will be displayed.
+
+=== "fix" command
+
+The "fix" command puts the ticket in to a fixed state.  If the ticket is
+startable, it will first start the ticket, then put the ticket in fixed state.
+
+  $ geera fix BZ-1000
+
+The ticket BZ-1000 should be in the "fixed" state.  If a user is specified in
+the "qa" section of the configuration file, the ticket will be automatically
+reassigned to that user.
+
+=== "mv" command
+
+The "mv" command reassigns a ticket to another user.  The following command
+will reassign the ticket BZ-1000 to the user "foo":
+
+  $ geera mv BZ-1000 foo
+
+=== "take" command
+
+The "take" command is similar to the "mv" command, but assigns the ticket to
+the user listed in the "username" section of the configuration file.  This
+command is useful when you wish to "take" a ticket from someone:
+
+  $ geera take BZ-1000
+
+=== "comment" command
+
+The "comment" command lets you comment on a ticket.  Comments are passed in
+through the -m flag.  For example:
+
+  $ geera comment BZ-1000 -m'This is a comment'
+
+== Comments
+
+An optional "-m" flag is available on every command.  The "-m" flag will
+automatically attach a comment to the ticket in addition to the original
+command performed.  For example, we can fix a ticket and add a comment at the
+same time by doing:
+
+  $ geera fix BZ-1000 -m'I totally fixed this ticket'
+
+== Example Workflows
+
+First, start the ticket, then do work, then fix the ticket:
+
+  $ geera start BZ-1000 -m'starting to work on awesome feature'
+  $ ...
+  $ ...
+  $ geera fix BZ-1000 -m'finished awesome feature'
+
+Maybe you need to add comments while fixing stuff:
+
+  $ geera start BZ-1000 -m'starting to work on awesome feature'
+  $ ...
+  $ geera comment BZ-1000 -m'I had to totally do this thing'
+  $ ...
+  $ geera fix BZ-1000 -m'finished awesome feature'
+
+You do some work, then need to give the ticket to someone else:
+
+  $ geera start BZ-1000 -m'starting to work on awesome feature'
+  $ ...
+  $ geera mv BZ-1000 coworker -m'This was too hard for me!'
+
 
 == INSTALL:
 
-* FIX (sudo gem install, anything else)
+* sudo gem install geera
 
 == LICENSE:
 
 (The MIT License)
 
-Copyright (c) 2010 FIX
+Copyright (c) 2010 ATT Interactive
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
