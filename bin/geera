@@ -54,7 +54,7 @@ when 'fix'
   ticket.start! if ticket.startable?
   ticket.fix! if ticket.fixable?
   ticket.assign_to login['qa'] if login['qa']
-when 'mv', 'reassign'
+when 'mv', 'assign'
   ticket.assign_to ARGV.shift
 when 'take'
   ticket.assign_to login['username']

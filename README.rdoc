@@ -44,7 +44,7 @@ The current available commands are:
 
   * start
   * fix
-  * mv
+  * assign
   * take
   * create
   * comment
@@ -70,12 +70,12 @@ The ticket BZ-1000 should be in the "fixed" state.  If a user is specified in
 the "qa" section of the configuration file, the ticket will be automatically
 reassigned to that user.
 
-=== "mv" command
+=== "assign" command
 
-The "mv" command reassigns a ticket to another user.  The following command
+The "assign" command reassigns a ticket to another user.  The following command
 will reassign the ticket BZ-1000 to the user "foo":
 
-  $ geera mv BZ-1000 foo
+  $ geera assign BZ-1000 foo
 
 === "take" command
 
