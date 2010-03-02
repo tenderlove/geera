@@ -1,5 +1,5 @@
 .autotest
-CHANGELOG.rdoc
+ChangeLog
 Manifest.txt
 README.rdoc
 Rakefile
