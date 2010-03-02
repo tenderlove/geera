@@ -46,6 +46,7 @@ The current available commands are:
   * fix
   * mv
   * take
+  * create
   * comment
 
 === "start" command
@@ -83,6 +84,17 @@ the user listed in the "username" section of the configuration file.  This
 command is useful when you wish to "take" a ticket from someone:
 
   $ geera take BZ-1000
+
+=== "create" command
+
+The "create" command will create a new ticket in the JIRA system.  It requires
+a project name on which to create the ticket.  For example, if you want to
+create a ticket in the "BZ" project, the command will look like this:
+
+  $ geera create BZ
+
+This command will open $EDITOR with a form to fill out.  Enter the details of
+the ticket, and the ticket will be created.
 
 === "comment" command
 
