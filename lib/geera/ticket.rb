@@ -1,5 +1,7 @@
 module Geera
   class Ticket
+    attr_reader :number
+
     ###
     # Create a new Ticket using Geera::Client +client+ and +ticket_number+.
     # This constructor should not be called directly, use Geera::Client#ticket
