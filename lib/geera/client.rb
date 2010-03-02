@@ -25,5 +25,29 @@ module Geera
     def ticket number
       Geera::Ticket.new self, number
     end
+
+    ###
+    # Create a ticket using +params+.  +params+ should be a hash, and *must*
+    # have a +project+, +summary+, and +description+ field.
+    #
+    # For example:
+    #
+    #   client.create_ticket :project => 'AB',
+    #                        :summary => 'foo',
+    #                        :description => 'bar'
+    #
+    def create_ticket params
+      [:project, :summary, :description].each do |param|
+        raise(ArgumentError, "#{param} required") unless params[param]
+      end
+
+      issue = Jira4R::V2::RemoteIssue.new
+      issue.project     = params[:project]
+      issue.summary     = params[:summary]
+      issue.description = params[:description]
+      issue.assignee    = params[:assignee] || @username
+      issue.type        = '1' #FIXME: wtf is this for?
+      @ctx.createIssue issue
+    end
   end
 end

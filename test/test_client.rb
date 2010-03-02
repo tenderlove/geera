@@ -159,5 +159,42 @@ class TestClient < Test::Unit::TestCase
     assert_equal 'assignee', rfv.id
     assert_equal 'aaron', rfv.values
   end
+
+  def test_create_ticket
+    params = { :project     => 'BZ',
+               :summary     => 'hello world',
+               :description => 'testing' }
+
+    @client.create_ticket params
+
+    last_call = @fj.call_stack.pop
+    assert_equal :createIssue, last_call.first
+    assert_instance_of Jira4R::V2::RemoteIssue, last_call.last
+
+    ri = last_call.last
+    assert_equal params[:project], ri.project
+    assert_equal '1', ri.type
+    assert_equal @username, ri.assignee
+    assert_equal params[:summary], ri.summary
+    assert_equal params[:description], ri.description
+  end
+
+  def test_create_bad_args
+    assert_raises(ArgumentError) do
+      @client.create_ticket {}
+    end
+
+    assert_raises(ArgumentError) do
+      @client.create_ticket :project => 'ab'
+    end
+
+    assert_raises(ArgumentError) do
+      @client.create_ticket :project => 'ab', :summary => 'foo'
+    end
+
+    assert_raises(ArgumentError) do
+      @client.create_ticket :project => 'ab', :description => 'foo'
+    end
+  end
 end
 
