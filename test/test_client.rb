@@ -19,6 +19,8 @@ class FakeJiraTool
 end
 
 class TestClient < Test::Unit::TestCase
+  FakeIssue = Struct.new(:description, :key)
+
   def setup
     @url = 'some_url'
     @fj = FakeJiraTool.new
@@ -94,6 +96,7 @@ class TestClient < Test::Unit::TestCase
     ]
 
     @fj.returns[:getAvailableActions] = actions
+    @fj.returns[:getIssue] = FakeIssue.new('desc')
     @ticket.start!
 
     last_call = @fj.call_stack.pop
@@ -106,6 +109,9 @@ class TestClient < Test::Unit::TestCase
     rfv = last_call.last.first
     assert_equal 'assignee', rfv.id
     assert_equal @username, rfv.values
+    rfv = last_call.last.last
+    assert_equal 'description', rfv.id
+    assert_equal 'desc', rfv.values
   end
 
   def test_fixable?
@@ -135,6 +141,7 @@ class TestClient < Test::Unit::TestCase
     ]
 
     @fj.returns[:getAvailableActions] = actions
+    @fj.returns[:getIssue] = FakeIssue.new('desc')
     @ticket.fix!
 
     last_call = @fj.call_stack.pop
@@ -147,6 +154,10 @@ class TestClient < Test::Unit::TestCase
     rfv = last_call.last.first
     assert_equal 'assignee', rfv.id
     assert_equal @username, rfv.values
+
+    rfv = last_call.last.last
+    assert_equal 'description', rfv.id
+    assert_equal 'desc', rfv.values
   end
 
   def test_assign_to
@@ -164,6 +175,8 @@ class TestClient < Test::Unit::TestCase
     params = { :project     => 'BZ',
                :summary     => 'hello world',
                :description => 'testing' }
+
+    @fj.returns[:createIssue] = FakeIssue.new(params[:description], 'foo')
 
     @client.create_ticket params
 

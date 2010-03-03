@@ -1,3 +1,7 @@
+Wed Mar  3 14:40:56 2010  Aaron Patterson <aaron@tenderlovemaking.com>
+
+	* starting and fixing a ticket will maintain description
+
 Tue Mar  2 10:31:42 2010  Aaron Patterson <aaron@tenderlovemaking.com>
 
 	* Changed "mv" command to "assign".
