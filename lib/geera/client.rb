@@ -50,5 +50,10 @@ module Geera
       issue = @ctx.createIssue issue
       ticket issue.key
     end
+
+    def list filter
+      m = @ctx.driver.method('getIssuesFromFilter')
+      m.call @ctx.token, filter
+    end
   end
 end
