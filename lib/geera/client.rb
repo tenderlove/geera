@@ -37,7 +37,7 @@ module Geera
     #                        :description => 'bar'
     #
     def create_ticket params
-      [:project, :summary, :description].each do |param|
+      [:project, :summary].each do |param|
         raise(ArgumentError, "#{param} required") unless params[param]
       end
 

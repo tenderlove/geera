@@ -116,7 +116,7 @@ when 'create'
 
   ticket = geera.create_ticket :project     => number,
                                :summary     => sum.sub(/^Summary:/, '').strip,
-                               :description => desc.strip
+                               :description => desc && desc.strip
 
   puts "Created ticket: #{ticket.number}"
 when 'comment'

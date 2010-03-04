@@ -1,3 +1,7 @@
+Thu Mar  4 09:24:46 2010  Aaron Patterson <aaron@tenderlovemaking.com>
+
+	* Description is no longer required to create a ticket
+
 Thu Mar  4 09:21:03 2010  Aaron Patterson <aaron@tenderlovemaking.com>
 
 	* bin/geera raises an exception on an unknown command.

@@ -202,10 +202,6 @@ class TestClient < Test::Unit::TestCase
     end
 
     assert_raises(ArgumentError) do
-      @client.create_ticket :project => 'ab', :summary => 'foo'
-    end
-
-    assert_raises(ArgumentError) do
       @client.create_ticket :project => 'ab', :description => 'foo'
     end
   end
