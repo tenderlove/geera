@@ -44,8 +44,9 @@ The current available commands are:
 
   * start
   * fix
-  * mv
+  * assign
   * take
+  * create
   * comment
 
 === "start" command
@@ -69,12 +70,12 @@ The ticket BZ-1000 should be in the "fixed" state.  If a user is specified in
 the "qa" section of the configuration file, the ticket will be automatically
 reassigned to that user.
 
-=== "mv" command
+=== "assign" command
 
-The "mv" command reassigns a ticket to another user.  The following command
+The "assign" command reassigns a ticket to another user.  The following command
 will reassign the ticket BZ-1000 to the user "foo":
 
-  $ geera mv BZ-1000 foo
+  $ geera assign BZ-1000 foo
 
 === "take" command
 
@@ -83,6 +84,17 @@ the user listed in the "username" section of the configuration file.  This
 command is useful when you wish to "take" a ticket from someone:
 
   $ geera take BZ-1000
+
+=== "create" command
+
+The "create" command will create a new ticket in the JIRA system.  It requires
+a project name on which to create the ticket.  For example, if you want to
+create a ticket in the "BZ" project, the command will look like this:
+
+  $ geera create BZ
+
+This command will open $EDITOR with a form to fill out.  Enter the details of
+the ticket, and the ticket will be created.
 
 === "comment" command
 

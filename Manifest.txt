@@ -1,5 +1,5 @@
 .autotest
-CHANGELOG.rdoc
+ChangeLog
 Manifest.txt
 README.rdoc
 Rakefile
@@ -7,4 +7,5 @@ bin/geera
 lib/geera.rb
 lib/geera/client.rb
 lib/geera/ticket.rb
+lib/template.txt
 test/test_client.rb

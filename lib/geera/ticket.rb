@@ -1,5 +1,7 @@
 module Geera
   class Ticket
+    attr_reader :number
+
     ###
     # Create a new Ticket using Geera::Client +client+ and +ticket_number+.
     # This constructor should not be called directly, use Geera::Client#ticket
@@ -8,6 +10,7 @@ module Geera
       @client = client
       @ctx    = client.ctx
       @number = ticket_number
+      @issue  = nil
     end
 
     ###
@@ -31,7 +34,8 @@ module Geera
     def start!
       action = available_actions.find { |x| x.name == 'Start' }
       assign = Jira4R::V2::RemoteFieldValue.new('assignee', @client.username)
-      @ctx.progressWorkflowAction(@number, action.id, [assign])
+      desc = Jira4R::V2::RemoteFieldValue.new('description', description)
+      @ctx.progressWorkflowAction(@number, action.id, [assign, desc])
     end
 
     ###
@@ -45,7 +49,8 @@ module Geera
     def fix!
       action = available_actions.find { |x| x.name == 'Fix' }
       assign = Jira4R::V2::RemoteFieldValue.new('assignee', @client.username)
-      @ctx.progressWorkflowAction(@number, action.id, [assign])
+      desc = Jira4R::V2::RemoteFieldValue.new('description', description)
+      @ctx.progressWorkflowAction(@number, action.id, [assign, desc])
     end
 
     ###
@@ -53,6 +58,15 @@ module Geera
     def assign_to username
       assign = Jira4R::V2::RemoteFieldValue.new('assignee', username)
       @ctx.updateIssue(@number, [assign])
+    end
+
+    def description
+      issue.description
+    end
+
+    private
+    def issue
+      @issue ||= @ctx.getIssue(@number)
     end
   end
 end

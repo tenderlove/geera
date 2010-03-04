@@ -1,0 +1,12 @@
+Summary: Enter your ticket summary here
+
+##### Description is below here #####
+
+What I did:
+
+
+What I expected:
+
+
+What actually happened:
+

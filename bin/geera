@@ -1,12 +1,15 @@
 #!/usr/bin/env ruby
 
 require 'rubygems'
+require 'tmpdir'
 require 'geera'
 require 'yaml'
 require 'optparse'
 
 config = File.join(ENV['HOME'], '.geera')
 login  = YAML.load(File.read config) rescue nil
+BUG_TEMPLATE = File.expand_path(File.join(
+  File.dirname(__FILE__), '..', 'lib', 'template.txt'))
 
 unless login
   File.open config, 'wb' do |f|
@@ -68,10 +71,25 @@ when 'fix'
   ticket.start! if ticket.startable?
   ticket.fix! if ticket.fixable?
   ticket.assign_to login['qa'] if login['qa']
-when 'mv', 'reassign'
+when 'mv', 'assign'
   ticket.assign_to ARGV.shift
 when 'take'
   ticket.assign_to login['username']
+when 'create'
+  fname = File.join(Dir.tmpdir, 'bug.txt')
+  File.open(fname, 'wb') do |f|
+    f.write File.read(BUG_TEMPLATE)
+  end
+
+  system("#{ENV['EDITOR'] || 'vi'} #{fname}")
+  contents = File.read(fname)
+  sum, desc = contents.split('##### Description is below here #####')
+
+  ticket = geera.create_ticket :project     => number,
+                               :summary     => sum.sub(/^Summary:/, '').strip,
+                               :description => desc.strip
+
+  puts "Created ticket: #{ticket.number}"
 when 'comment'
   # Do nothing, let the -m flag pick it up
 end
