@@ -3,7 +3,7 @@ require 'geera/client'
 require 'geera/ticket'
 
 module Geera
-  VERSION = '1.1.1'
+  VERSION = '1.1.2'
 end
 
 # Total hacks for shutting up Jira4R

@@ -22,7 +22,7 @@ After you've installed Geera, you must configure your ~/.geera file like this:
 That command will create a $HOME/.geera file for you to fill out.  The config
 file will look something like this:
 
-  --- 
+  ---
   url: FIXME
   username: FIXME
   qa: FIXME
@@ -48,6 +48,7 @@ The current available commands are:
   * take
   * create
   * comment
+  * list
 
 === "start" command
 
@@ -102,6 +103,28 @@ The "comment" command lets you comment on a ticket.  Comments are passed in
 through the -m flag.  For example:
 
   $ geera comment BZ-1000 -m'This is a comment'
+
+=== "list" command
+
+The "list" command lets you list tickets in a filter.  You can then take the
+ticket numbers returned and assign them or whatever.
+
+  $ geera list 1138
+
+This command prints out the first 10 tickets in the 1138 filter. Of course,
+named filters would be much nicer.  If you add a "filters" hash in your
+~/.geera file, you can assign names to filter ids.
+
+filters:
+  all: 12482
+  features: 12481
+  bugs: 12480
+
+Then you can run:
+
+  $ geera list bugs
+
+And get the tickets from filter id 12480.
 
 == Comments
 

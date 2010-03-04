@@ -27,11 +27,32 @@ unless login
   abort "Created ~/.geera for you. Fill it out"
 end
 
+
 options = {}
 OptionParser.new do |opts|
-  opts.banner = "Usage: geera [options]"
+  opts.banner = <<-EOF
+  Usage: geera <command> <ticket|project> [options]
 
-  opts.on("-m", "--message MESSAGE", "Add comment") do |v|
+  Commands:
+    create - Creates a new ticket in a project
+      `geera create TK`
+    start - Marks a ticket started for you.
+      `geera start TK-421`
+    fix - Marks a ticket as fixed and assigns to QA.
+      `geera fix TK-421`
+    reassign - Assigns a ticket to someone else
+      `geera reassign TK-421 glucas`
+    take - Assigns a ticket to yourself
+      `geera take TK-421`
+    list - Lists tickets in a filter
+      `geera list 1138`
+    comment - Simply comments on the ticket
+      `geera comment --message 'This is a difficult bug.'`
+
+    Options:
+  EOF
+
+  opts.on("-m", "--message MESSAGE", "Add a comment") do |v|
     options[:message] = v
   end
 end.parse!
@@ -60,6 +81,16 @@ when 'take'
   ticket.assign_to login['username']
 when 'show'
   puts ticket.inspect
+when 'list'
+  number = (login['filters'] && login['filters'][number]) || number
+  tickets = geera.list number
+  if(tickets.empty?)
+    puts "No Tickets found"
+  else
+    tickets[0..10].each do |ticket|
+      puts "#{ticket.key.ljust(8)} #{ticket.summary}"
+    end
+  end
 when 'create'
   fname = File.join(Dir.tmpdir, 'bug.txt')
   File.open(fname, 'wb') do |f|
