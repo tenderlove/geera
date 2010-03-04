@@ -121,6 +121,8 @@ when 'create'
   puts "Created ticket: #{ticket.number}"
 when 'comment'
   # Do nothing, let the -m flag pick it up
+else
+  raise "unknown command: #{command}"
 end
 
 ticket.comment options[:message] if options[:message]
