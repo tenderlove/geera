@@ -56,8 +56,7 @@ module Geera
     end
 
     def list filter
-      m = @ctx.driver.method('getIssuesFromFilter')
-      m.call @ctx.token, filter
+      @ctx.getIssuesFromFilter filter
     end
   end
 end
