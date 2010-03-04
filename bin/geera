@@ -58,6 +58,8 @@ when 'mv', 'assign'
   ticket.assign_to ARGV.shift
 when 'take'
   ticket.assign_to login['username']
+when 'show'
+  puts ticket.inspect
 when 'create'
   fname = File.join(Dir.tmpdir, 'bug.txt')
   File.open(fname, 'wb') do |f|

@@ -1,3 +1,5 @@
+require 'erb'
+
 module Geera
   class Ticket
     attr_reader :number
@@ -64,9 +66,38 @@ module Geera
       issue.description
     end
 
+    def inspect
+      template = ERB.new <<-eoinspect
+## Reporter: <%= issue.reporter %>
+## Assignee: <%= issue.assignee %>
+## Priority: <%= issue.priority %>
+
+## Summary
+
+<%= issue.summary %>
+
+## Description:
+
+<%= issue.description %>
+
+## Comments:
+<% comments.each do |comment| %>
+* <%= comment.author %>
+  <% comment.body.split(/[\r\n]+/).each do |line| %>
+  > <%= line %><% end %>
+<% end %>
+
+      eoinspect
+      template.result binding
+    end
+
     private
     def issue
       @issue ||= @ctx.getIssue(@number)
+    end
+
+    def comments
+      @ctx.getComments @number
     end
   end
 end
