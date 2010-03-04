@@ -81,8 +81,21 @@ when 'take'
   ticket.assign_to login['username']
 when 'show'
   puts ticket.inspect
+when 'filters'
+  puts "# Your filters"
+  geera.filters.each do |filter|
+    puts "  * #{filter.name.inspect}"
+  end
 when 'list'
   number = (login['filters'] && login['filters'][number]) || number
+
+  ## Ensure that +number+ is actually a number
+  begin
+    number = Integer(number)
+  rescue ArgumentError
+    number = geera.filters.find { |f| f.name == number }.id
+  end
+
   tickets = geera.list number
   if(tickets.empty?)
     puts "No Tickets found"
