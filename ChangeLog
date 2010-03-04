@@ -1,3 +1,7 @@
+Wed Mar  3 17:50:26 2010  Aaron Patterson <aaron@tenderlovemaking.com>
+
+	* added hacks for silencing Jira4R
+
 Wed Mar  3 14:40:56 2010  Aaron Patterson <aaron@tenderlovemaking.com>
 
 	* starting and fixing a ticket will maintain description
