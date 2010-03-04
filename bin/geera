@@ -31,9 +31,11 @@ end
 options = {}
 OptionParser.new do |opts|
   opts.banner = <<-EOF
-  Usage: geera <command> <ticket> [options]
+  Usage: geera <command> <ticket|project> [options]
 
   Commands:
+    create - Creates a new ticket in a project
+      `geera create TK`
     start - Marks a ticket started for you.
       `geera start TK-421`
     fix - Marks a ticket as fixed and assigns to QA.
