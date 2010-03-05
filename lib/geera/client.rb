@@ -47,6 +47,7 @@ module Geera
       issue.description = params[:description]
       issue.assignee    = params[:assignee] || @username
       issue.type        = '1' #FIXME: wtf is this for?
+      issue.priority    = '5'
       issue = @ctx.createIssue issue
       ticket issue.key
     end

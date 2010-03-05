@@ -35,9 +35,12 @@ module Geera
     # Start this ticket.
     def start!
       action = available_actions.find { |x| x.name == 'Start' }
-      assign = Jira4R::V2::RemoteFieldValue.new('assignee', @client.username)
-      desc = Jira4R::V2::RemoteFieldValue.new('description', description)
-      @ctx.progressWorkflowAction(@number, action.id, [assign, desc])
+
+      assign   = Jira4R::V2::RemoteFieldValue.new('assignee', @client.username)
+      desc     = Jira4R::V2::RemoteFieldValue.new('description', description)
+      priority = Jira4R::V2::RemoteFieldValue.new('priority', issue.priority)
+
+      @ctx.progressWorkflowAction(@number, action.id, [assign, desc, priority])
     end
 
     ###
@@ -50,9 +53,12 @@ module Geera
     # Fix this ticket.
     def fix!
       action = available_actions.find { |x| x.name == 'Fix' }
-      assign = Jira4R::V2::RemoteFieldValue.new('assignee', @client.username)
-      desc = Jira4R::V2::RemoteFieldValue.new('description', description)
-      @ctx.progressWorkflowAction(@number, action.id, [assign, desc])
+
+      assign   = Jira4R::V2::RemoteFieldValue.new('assignee', @client.username)
+      desc     = Jira4R::V2::RemoteFieldValue.new('description', description)
+      priority = Jira4R::V2::RemoteFieldValue.new('priority', issue.priority)
+
+      @ctx.progressWorkflowAction(@number, action.id, [assign, desc, priority])
     end
 
     ###

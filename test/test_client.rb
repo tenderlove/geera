@@ -19,7 +19,7 @@ class FakeJiraTool
 end
 
 class TestClient < Test::Unit::TestCase
-  FakeIssue = Struct.new(:description, :key)
+  FakeIssue = Struct.new(:description, :key, :priority)
 
   def setup
     @url = 'some_url'
@@ -96,7 +96,7 @@ class TestClient < Test::Unit::TestCase
     ]
 
     @fj.returns[:getAvailableActions] = actions
-    @fj.returns[:getIssue] = FakeIssue.new('desc')
+    @fj.returns[:getIssue] = FakeIssue.new('desc', nil, '5')
     @ticket.start!
 
     last_call = @fj.call_stack.pop
@@ -106,12 +106,15 @@ class TestClient < Test::Unit::TestCase
 
     assert_instance_of(Array, last_call.last)
 
-    rfv = last_call.last.first
-    assert_equal 'assignee', rfv.id
-    assert_equal @username, rfv.values
-    rfv = last_call.last.last
-    assert_equal 'description', rfv.id
-    assert_equal 'desc', rfv.values
+    params = last_call.last
+    assert_equal 'assignee', params.first.id
+    assert_equal @username, params.first.values
+
+    assert_equal 'description', params[1].id
+    assert_equal 'desc', params[1].values
+
+    assert_equal 'priority', params[2].id
+    assert_equal '5', params[2].values
   end
 
   def test_fixable?
@@ -141,7 +144,7 @@ class TestClient < Test::Unit::TestCase
     ]
 
     @fj.returns[:getAvailableActions] = actions
-    @fj.returns[:getIssue] = FakeIssue.new('desc')
+    @fj.returns[:getIssue] = FakeIssue.new('desc', nil, '5')
     @ticket.fix!
 
     last_call = @fj.call_stack.pop
@@ -151,13 +154,15 @@ class TestClient < Test::Unit::TestCase
 
     assert_instance_of(Array, last_call.last)
 
-    rfv = last_call.last.first
-    assert_equal 'assignee', rfv.id
-    assert_equal @username, rfv.values
+    params = last_call.last
+    assert_equal 'assignee', params.first.id
+    assert_equal @username, params.first.values
 
-    rfv = last_call.last.last
-    assert_equal 'description', rfv.id
-    assert_equal 'desc', rfv.values
+    assert_equal 'description', params[1].id
+    assert_equal 'desc', params[1].values
+
+    assert_equal 'priority', params[2].id
+    assert_equal '5', params[2].values
   end
 
   def test_assign_to

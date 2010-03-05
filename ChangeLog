@@ -1,3 +1,7 @@
+Fri Mar  5 08:59:37 2010  Aaron Patterson <aaron@tenderlovemaking.com>
+
+	* Priority is copied around when starting or fixing.
+
 Thu Mar  4 09:24:46 2010  Aaron Patterson <aaron@tenderlovemaking.com>
 
 	* Description is no longer required to create a ticket
