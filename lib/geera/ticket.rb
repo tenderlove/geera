@@ -77,6 +77,7 @@ module Geera
 ## Reporter: <%= issue.reporter %>
 ## Assignee: <%= issue.assignee %>
 ## Priority: <%= issue.priority %>
+## Fix Versions: <%= issue.fixVersions.map {|fv| fv.name}.join(', ') %>
 
 ## Summary
 
