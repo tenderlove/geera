@@ -48,6 +48,9 @@ OptionParser.new do |opts|
       `geera take TK-421`
     list - Lists tickets in a filter
       `geera list 1138`
+      `geera list my-filter-name`
+    filters - Lists your filters
+      `geera filters`
     comment - Simply comments on the ticket
       `geera comment --message 'This is a difficult bug.'`
 
