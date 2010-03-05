@@ -42,7 +42,7 @@ OptionParser.new do |opts|
       `geera start TK-421`
     fix - Marks a ticket as fixed and assigns to QA.
       `geera fix TK-421`
-    reassign - Assigns a ticket to someone else
+    assign - Assigns a ticket to someone else
       `geera reassign TK-421 glucas`
     take - Assigns a ticket to yourself
       `geera take TK-421`
@@ -51,7 +51,7 @@ OptionParser.new do |opts|
       `geera list my-filter-name`
     filters - Lists your filters
       `geera filters`
-    comment - Simply comments on the ticket
+    comment - Simply comment on the ticket
       `geera comment --message 'This is a difficult bug.'`
 
     Options:
