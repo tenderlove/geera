@@ -34,6 +34,8 @@ OptionParser.new do |opts|
   Usage: geera <command> <ticket|project> [options]
 
   Commands:
+    show - Shows ticket details
+      `geera show TK-421`
     create - Creates a new ticket in a project
       `geera create TK`
     start - Marks a ticket started for you.
