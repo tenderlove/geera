@@ -38,8 +38,6 @@ OptionParser.new do |opts|
       `geera show TK-421`
     create - Creates a new ticket in a project
       `geera create TK`
-    start - Marks a ticket started for you.
-      `geera start TK-421`
     fix - Marks a ticket as fixed and assigns to QA.
       `geera fix TK-421`
     assign - Assigns a ticket to someone else
@@ -52,7 +50,7 @@ OptionParser.new do |opts|
     filters - Lists your filters
       `geera filters`
     comment - Simply comment on the ticket
-      `geera comment --message 'This is a difficult bug.'`
+      `geera comment TK-421 --message 'This is a difficult bug.'`
 
     Options:
   EOF
@@ -62,8 +60,8 @@ OptionParser.new do |opts|
   end
 end.parse!
 
-geera = Geera::Client.new(login['url'])
-geera.login(login['username'], login['password'])
+exec = Geera::Executable.new login, ARGV, options
+geera = exec.geera
 
 command = ARGV.shift
 number  = ARGV.shift
@@ -71,19 +69,17 @@ ticket  = geera.ticket number
 
 case command
 when 'start'
-  unless ticket.startable?
-    abort "Ticket #{number} is not startable. Available actions:\n" \
-      "  - #{ticket.available_actions.map { |x| x.name + "\n" }.join("  - ")}"
-  end
-  ticket.start!
+  command = Geera::Commands::Start.new login, number, geera, ARGV
+  command.execute!
 when 'fix'
-  ticket.start! if ticket.startable?
-  ticket.fix! if ticket.fixable?
-  ticket.assign_to login['qa'] if login['qa']
+  command = Geera::Commands::Fix.new login, number, geera, ARGV
+  command.execute!
 when 'mv', 'assign'
-  ticket.assign_to ARGV.shift
+  command = Geera::Commands::Assign.new login, number, geera, ARGV
+  command.execute!
 when 'take'
-  ticket.assign_to login['username']
+  command = Geera::Commands::Take.new login, number, geera, ARGV
+  command.execute!
 when 'show'
   puts ticket.inspect
 when 'filters'

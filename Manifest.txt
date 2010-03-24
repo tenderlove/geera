@@ -6,6 +6,12 @@ Rakefile
 bin/geera
 lib/geera.rb
 lib/geera/client.rb
+lib/geera/commands/assign.rb
+lib/geera/commands/command.rb
+lib/geera/commands/fix.rb
+lib/geera/commands/start.rb
+lib/geera/commands/take.rb
+lib/geera/executable.rb
 lib/geera/ticket.rb
 lib/template.txt
 test/test_client.rb

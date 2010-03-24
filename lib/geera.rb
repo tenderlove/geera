@@ -1,6 +1,10 @@
 require 'jira4r'
 require 'geera/client'
 require 'geera/ticket'
+require 'geera/executable'
+require 'geera/commands/command'
+require 'geera/commands/assign'
+require 'geera/commands/start'
 
 module Geera
   VERSION = '1.2.2'
