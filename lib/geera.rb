@@ -8,6 +8,7 @@ require 'geera/commands/start'
 require 'geera/commands/fix'
 require 'geera/commands/take'
 require 'geera/commands/show'
+require 'geera/commands/filters'
 
 module Geera
   VERSION = '1.2.2'
