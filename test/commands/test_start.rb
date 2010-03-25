@@ -17,8 +17,8 @@ module Geera
         end
 
         Class.new(Geera::Commands::Start) {
-          attr_reader :ticket
           def initialize ticket
+            super(nil, nil, nil, nil)
             @ticket = ticket
           end
         }.new(recorder).execute!
