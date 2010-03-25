@@ -5,6 +5,9 @@ require 'geera/executable'
 require 'geera/commands/command'
 require 'geera/commands/assign'
 require 'geera/commands/start'
+require 'geera/commands/fix'
+require 'geera/commands/take'
+require 'geera/commands/show'
 
 module Geera
   VERSION = '1.2.2'

@@ -1,7 +1,7 @@
 module Geera
   module Commands
     class Command
-      attr_reader :geera, :number, :config
+      attr_reader :geera, :number, :config, :argv
 
       def initialize config, number, geera, argv
         @argv   = argv
