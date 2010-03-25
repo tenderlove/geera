@@ -48,6 +48,19 @@ module Geera
         fake_command.new(recorder, {'qa' => 'foo'}).execute!
       end
 
+      def test_execute_no_qa
+        recorder = Object.new
+        flexmock(recorder) do |thing|
+          thing.should_receive(:startable?).once.and_return(false)
+          thing.should_receive(:start!).never
+          thing.should_receive(:fixable?).once.and_return(false)
+          thing.should_receive(:fix!).never
+          thing.should_receive(:assign_to).never
+        end
+
+        fake_command.new(recorder, {'qa' => nil}).execute!
+      end
+
       def fake_command
         Class.new(Geera::Commands::Fix) {
           def initialize ticket, config
