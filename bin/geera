@@ -81,30 +81,16 @@ when 'take'
   command = Geera::Commands::Take.new login, number, geera, ARGV
   command.execute!
 when 'show'
-  puts ticket.inspect
+  command = Geera::Commands::Show.new login, number, geera, ARGV
+  command.execute!
 when 'filters'
-  puts "# Your filters"
-  geera.filters.each do |filter|
-    puts "  * #{filter.name.inspect}"
-  end
+  command = Geera::Commands::Filters.new login, number, geera, ARGV
+  command.execute!
 when 'list'
   number = (login['filters'] && login['filters'][number]) || number
 
-  ## Ensure that +number+ is actually a number
-  begin
-    number = Integer(number)
-  rescue ArgumentError
-    number = geera.filters.find { |f| f.name == number }.id
-  end
-
-  tickets = geera.list number
-  if(tickets.empty?)
-    puts "No Tickets found"
-  else
-    tickets[0..10].each do |ticket|
-      puts "#{ticket.key.ljust(8)} #{ticket.summary}"
-    end
-  end
+  command = Geera::Commands::List.new login, number, geera, ARGV
+  command.execute!
 when 'create'
   fname = File.join(Dir.tmpdir, 'bug.txt')
   File.open(fname, 'wb') do |f|
