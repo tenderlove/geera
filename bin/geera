@@ -74,7 +74,7 @@ when 'start'
 when 'fix'
   command = Geera::Commands::Fix.new login, number, geera, ARGV
   command.execute!
-when 'mv', 'assign'
+when 'assign'
   command = Geera::Commands::Assign.new login, number, geera, ARGV
   command.execute!
 when 'take'

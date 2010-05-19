@@ -10,6 +10,7 @@ require 'geera/commands/take'
 require 'geera/commands/show'
 require 'geera/commands/filters'
 require 'geera/commands/list'
+require 'geera/commands/estimate'
 
 module Geera
   VERSION = '1.2.2'

@@ -58,6 +58,11 @@ module Geera
       @ctx.updateIssue(@number, [assign])
     end
 
+    def estimate= amount
+      assign = Jira4R::V2::RemoteFieldValue.new('timetracking', amount)
+      @ctx.updateIssue(@number, [assign])
+    end
+
     def description
       issue.description
     end
