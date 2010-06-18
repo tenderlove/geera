@@ -48,7 +48,9 @@ module Geera
     # Fix this ticket.
     def fix!
       action = available_actions.find { |x| x.name == 'Fix' }
-      @ctx.progressWorkflowAction(@number, action.id, passthrough_attributes)
+      @ctx.progressWorkflowAction(@number, action.id, passthrough_attributes + [
+       Jira4R::V2::RemoteFieldValue.new('customfield_10176', @client.username),
+      ])
     end
 
     ###

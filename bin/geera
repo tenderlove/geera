@@ -71,6 +71,9 @@ case command
 when 'start'
   command = Geera::Commands::Start.new login, number, geera, ARGV
   command.execute!
+when 'estimate'
+  command = Geera::Commands::Estimate.new login, number, geera, ARGV
+  command.execute!
 when 'fix'
   command = Geera::Commands::Fix.new login, number, geera, ARGV
   command.execute!
