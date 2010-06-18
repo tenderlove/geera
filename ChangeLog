@@ -1,3 +1,7 @@
+Fri Jun 18 14:26:00 2010  Aaron Patterson <aaron@tenderlovemaking.com>
+
+	* Added a custom field for the "closer" of a ticket.
+
 Fri Mar  5 08:59:37 2010  Aaron Patterson <aaron@tenderlovemaking.com>
 
 	* Priority is copied around when starting or fixing.

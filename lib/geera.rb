@@ -13,7 +13,7 @@ require 'geera/commands/list'
 require 'geera/commands/estimate'
 
 module Geera
-  VERSION = '1.2.2'
+  VERSION = '1.2.3'
 end
 
 # Total hacks for shutting up Jira4R
