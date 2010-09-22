@@ -12,6 +12,7 @@ lib/geera/commands/estimate.rb
 lib/geera/commands/filters.rb
 lib/geera/commands/fix.rb
 lib/geera/commands/list.rb
+lib/geera/commands/resolve.rb
 lib/geera/commands/show.rb
 lib/geera/commands/start.rb
 lib/geera/commands/take.rb

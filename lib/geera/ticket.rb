@@ -50,7 +50,17 @@ module Geera
       action = available_actions.find { |x| x.name == 'Fix' }
       @ctx.progressWorkflowAction(@number, action.id, passthrough_attributes + [
        Jira4R::V2::RemoteFieldValue.new('customfield_10176', @client.username),
-      ])
+      ]) # FIX: wtf is that hardcoded string? That can't be right
+      # TODO: redesign to be subclassed and override passthrough_attributes
+    end
+
+    ###
+    # Resolve this ticket.
+    def resolve!
+      action = available_actions.find { |x| x.name == 'Resolve' }
+      @ctx.progressWorkflowAction(@number, action.id, passthrough_attributes + [
+       Jira4R::V2::RemoteFieldValue.new('customfield_10176', @client.username),
+      ]) # FIX: wtf is that hardcoded string? That can't be right
     end
 
     ###

@@ -26,6 +26,14 @@ module Geera
       Geera::Ticket.new self, number
     end
 
+    def components project
+      self.ctx.getComponents(project)
+    end
+
+    def component project, name
+      self.components(project).find { |c| c.name.downcase == name.downcase }
+    end
+
     ###
     # Create a ticket using +params+.  +params+ should be a hash, and *must*
     # have a +project+, +summary+, and +description+ field.
@@ -46,6 +54,7 @@ module Geera
       issue.summary     = params[:summary]
       issue.description = params[:description]
       issue.assignee    = params[:assignee] || @username
+      issue.components  = params[:components]
       issue.type        = '1' #FIXME: wtf is this for?
       issue.priority    = '5'
       issue = @ctx.createIssue issue
