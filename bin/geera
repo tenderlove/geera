@@ -67,6 +67,8 @@ command = ARGV.shift
 number  = ARGV.shift
 ticket  = geera.ticket number
 
+project = number # for readability
+
 case command
 when 'start'
   command = Geera::Commands::Start.new login, number, geera, ARGV
@@ -76,6 +78,9 @@ when 'estimate'
   command.execute!
 when 'fix'
   command = Geera::Commands::Fix.new login, number, geera, ARGV
+  command.execute!
+when 'resolve'
+  command = Geera::Commands::Resolve.new login, number, geera, ARGV
   command.execute!
 when 'assign'
   command = Geera::Commands::Assign.new login, number, geera, ARGV
@@ -94,6 +99,19 @@ when 'list'
 
   command = Geera::Commands::List.new login, number, geera, ARGV
   command.execute!
+when /components?/
+  p Hash[*geera.components(project).map { |c| [c.name, c.id] }.flatten]
+when /quicky?/
+  # TODO: this is horrid UI, but it works for me for now...
+  component = ARGV.shift
+  user      = ARGV.shift
+  summary   = ARGV.join(" ")
+  ticket = geera.create_ticket(:project    => project,
+                               :summary    => summary,
+                               :assignee   => user,
+                               :components => geera.component(project,
+                                                              component))
+  puts "Created ticket: #{ticket.number}"
 when 'create'
   fname = File.join(Dir.tmpdir, 'bug.txt')
   File.open(fname, 'wb') do |f|
@@ -104,7 +122,7 @@ when 'create'
   contents = File.read(fname)
   sum, desc = contents.split('##### Description is below here #####')
 
-  ticket = geera.create_ticket :project     => number,
+  ticket = geera.create_ticket :project     => project,
                                :summary     => sum.sub(/^Summary:/, '').strip,
                                :description => desc && desc.strip
 
