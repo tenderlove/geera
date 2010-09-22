@@ -3,6 +3,8 @@
 require 'rubygems'
 require 'hoe'
 
+Hoe.plugin :isolate
+
 Hoe.spec 'geera' do
   developer('Aaron Patterson', 'apatterson@atti.com')
   self.readme_file      = 'README.rdoc'
